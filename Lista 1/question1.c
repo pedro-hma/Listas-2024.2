@@ -7,7 +7,7 @@ typedef struct Estados{
     int numAcidentes;
 };
 void dados(struct Estados estados[]);
-void acidentes(struct Estados estados[], int maxAcidentes,int minAcidentes);
+void acidentes(struct Estados estados[], int *maxAcidentes,int *minAcidentes);
 float percental(struct Estados estados[]);
 float mediaAcidentes(struct Estados estados[]);
 void acimaDaMedia(struct Estados estados[],float media);
@@ -39,5 +39,17 @@ void dados(struct Estados estados[]){
         scanf("%s",estados[i].numVeiculos);
         printf("Informe o numero de acidentes do estado: ");
         scanf("%s",estados[i].numVeiculos);
+    }
+}
+void acidentes(struct Estados estados[], int *maxAcidentes,int *minAcidentes){
+    *maxAcidentes = 0;
+    *minAcidentes = 0;
+    for(int i = 1; i < QTD_ESTADOS;++i){
+        if(estados[i].numAcidentes > estados[*maxAcidentes].numAcidentes){
+            *maxAcidentes = i;
+        }
+        if(estados[i].numAcidentes > estados[*maxAcidentes].numAcidentes){
+            *minAcidentes = i;
+        }
     }
 }
