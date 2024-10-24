@@ -1,0 +1,7 @@
+estado : pernambuco
+veiculos : 500
+acidentes : 200
+
+estado : são paulo
+veiculos : 6000
+acidentes : 700
