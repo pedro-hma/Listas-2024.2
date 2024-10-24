@@ -63,3 +63,11 @@ float mediaAcidentes(struct Estados estados[]){
     }
     return (float) soma / QTD_ESTADOS;
 }
+void acimaDaMedia(struct Estados estados[],float media){
+    printf("Estados acima da média :\n");
+    for(int i = 0; i < QTD_ESTADOS; ++i){
+        if(estados[i].numAcidentes > media){
+            printf("%s\n",estados[i].nome);
+        }
+    }
+}
