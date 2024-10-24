@@ -53,3 +53,13 @@ void acidentes(struct Estados estados[], int *maxAcidentes,int *minAcidentes){
         }
     }
 }
+float percental(struct Estados estados[]){
+    return ((float)estados->numAcidentes / estados->numVeiculos);
+}
+float mediaAcidentes(struct Estados estados[]){
+    int soma = 0;
+    for(int i = 0; i < QTD_ESTADOS;++i){
+        soma += estados[i].numAcidentes;
+    }
+    return (float) soma / QTD_ESTADOS;
+}
