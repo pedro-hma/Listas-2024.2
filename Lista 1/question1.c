@@ -5,7 +5,7 @@ typedef struct Estados{
     char nome [50];
     int numVeiculos;
     int numAcidentes;
-};
+} Estados;
 void dados(struct Estados estados[]);
 void acidentes(struct Estados estados[], int *maxAcidentes,int *minAcidentes);
 float percental(struct Estados estados[]);
@@ -17,13 +17,15 @@ int main(){
     dados(estados);
 
     int maxacidentes, minacidentes;
-    acidentes(estados,maxacidentes,minacidentes);
+    acidentes(estados,&maxacidentes,&minacidentes);
 
     float media = mediaAcidentes(estados);
     acimaDaMedia(estados,media);
 
     for(int i = 0; i < QTD_ESTADOS; ++i){
-         printf("Percentual de acidentes no estado %s: %.2f%%\n", estados[i].nome, percentualAcidentes(estados[i]));
+         printf("Percentual de acidentes no estado %s: %.2f%%\n", 
+       estados[i].nome, percental(&estados[i]));
+
     }
     printf("Estado com mais acidentes: %s com %d acidentes\n", estados[maxacidentes].nome, estados[maxacidentes].numAcidentes);
     printf("Estado com menos acidentes: %s com %d acidentes\n", estados[minacidentes].nome, estados[minacidentes].numAcidentes);
@@ -36,9 +38,9 @@ void dados(struct Estados estados[]){
         printf("Informe o nome do estado: ");
         scanf("%s",estados[i].nome);
         printf("Informe o numero de veiculos do estado: ");
-        scanf("%s",estados[i].numVeiculos);
+        scanf("%d",estados[i].numVeiculos);
         printf("Informe o numero de acidentes do estado: ");
-        scanf("%s",estados[i].numVeiculos);
+        scanf("%d",estados[i].numVeiculos);
     }
 }
 void acidentes(struct Estados estados[], int *maxAcidentes,int *minAcidentes){
@@ -48,14 +50,15 @@ void acidentes(struct Estados estados[], int *maxAcidentes,int *minAcidentes){
         if(estados[i].numAcidentes > estados[*maxAcidentes].numAcidentes){
             *maxAcidentes = i;
         }
-        if(estados[i].numAcidentes > estados[*maxAcidentes].numAcidentes){
-            *minAcidentes = i;
-        }
+        if (estados[i].numAcidentes < estados[*minAcidentes].numAcidentes) {
+    *minAcidentes = i;
+}
     }
 }
-float percental(struct Estados estados[]){
-    return ((float)estados->numAcidentes / estados->numVeiculos);
+float percental(Estados *estado) {
+    return ((float)estado->numAcidentes / estado->numVeiculos) * 100;
 }
+
 float mediaAcidentes(struct Estados estados[]){
     int soma = 0;
     for(int i = 0; i < QTD_ESTADOS;++i){
