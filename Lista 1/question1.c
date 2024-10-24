@@ -23,7 +23,7 @@ int main(){
     acimaDaMedia(estados,media);
 
     for(int i = 0; i < QTD_ESTADOS; ++i){
-        printf("Percentual de acidentes no estado %s: %.2f\n", estados[i].nome, percentualAcidentes(estados[i]));
+         printf("Percentual de acidentes no estado %s: %.2f%%\n", estados[i].nome, percentualAcidentes(estados[i]));
     }
     printf("Estado com mais acidentes: %s com %d acidentes\n", estados[maxacidentes].nome, estados[maxacidentes].numAcidentes);
     printf("Estado com menos acidentes: %s com %d acidentes\n", estados[minacidentes].nome, estados[minacidentes].numAcidentes);
