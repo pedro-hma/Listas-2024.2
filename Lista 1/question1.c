@@ -31,3 +31,13 @@ int main(){
 
     return 0;
 }
+void dados(struct Estados estados[]){
+    for(int i = 0; i < QTD_ESTADOS; ++i){
+        printf("Informe o nome do estado: ");
+        scanf("%s",estados[i].nome);
+        printf("Informe o numero de veiculos do estado: ");
+        scanf("%s",estados[i].numVeiculos);
+        printf("Informe o numero de acidentes do estado: ");
+        scanf("%s",estados[i].numVeiculos);
+    }
+}
