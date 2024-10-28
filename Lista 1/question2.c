@@ -38,3 +38,19 @@ int main(){
     exibirProduto(produtos,numProdutos);
     exibirProdutosEstoqueZero(produtos,numProdutos);
 }
+
+void cadastarProduto(Produto produtos[], int *numProdutos){
+    if(*numProdutos >= MAX_PRODUTOS){
+        printf("Limite de produtos atingidos.\n");
+        return;
+    }
+    printf("Informe o código do produto : ");
+    scanf("%d",&produtos[*numProdutos].codigo);
+    printf("Informe a descrição do produto : ");
+    scanf("%s",&produtos[*numProdutos].descricao);
+    printf("Informe o valor unitario do produto : ");
+    scanf("%f",&produtos[*numProdutos].valorUnidade);
+    printf("Informe a quantidade em estoque : ");
+    scanf("%d",&produtos[*numProdutos].qtdEstoque);
+    (*numProdutos) ++;
+}
