@@ -5,3 +5,15 @@ acidentes : 200
 estado : são paulo
 veiculos : 6000
 acidentes : 700
+
+produtos :
+maçã{
+    codigo : 0
+    descrição: fruta
+    valorUnidade : 1.40
+}
+uva {
+codigo : 1
+    descrição: fruta
+    valorUnidade : 1.42
+}
