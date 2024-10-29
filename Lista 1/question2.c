@@ -47,18 +47,18 @@ void cadastarProduto(Produto produtos[], int *numProdutos){
     printf("Informe o código do produto : ");
     scanf("%d",&produtos[*numProdutos].codigo);
     printf("Informe a descrição do produto : ");
-    scanf("%s",&produtos[*numProdutos].descricao);
+    scanf("%s",produtos[*numProdutos].descricao);
     printf("Informe o valor unitario do produto : ");
     scanf("%f",&produtos[*numProdutos].valorUnidade);
     printf("Informe a quantidade em estoque : ");
     scanf("%d",&produtos[*numProdutos].qtdEstoque);
     (*numProdutos) ++;
 }
-void exibirProduto(Produto produtos[],int numProdutos){
+void alterarValorUnitario(Produto produtos[],int numProdutos, int codigo){
     for(int i = 0; i < numProdutos;++i){
         if(produtos[i].codigo == 0){
              printf("Informe o novo valor unitário do produto %s: ", produtos[i].descricao);
-            scanf("%f", &produtos[i].valorUnitario);
+            scanf("%f", &produtos[i].valorUnidade);
             printf("Valor unitário atualizado com sucesso.\n");
         }
         return;
@@ -68,15 +68,15 @@ void exibirProduto(Produto produtos[],int numProdutos){
 float informarValorUnitario(Produto produtos[],int numProdutos, int codigo){
     for(int i = 0; i < numProdutos;++i){
         if(produtos[i].codigo == 0 ){
-            return produtos[i].valorUnitario
+            return produtos[i].valorUnidade;
         }
     }
-    return v;
+    return -1;
 }
 int informarQuantidadeEstoque(Produto produtos[],int numProdutos, int codigo){
     for(int i = 0; i < numProdutos;++i){
         if(produtos[i].codigo == 0 ){
-            return produtos[i].qtdEstoque
+            return produtos[i].qtdEstoque;
         }
     }
     return -1;
@@ -84,32 +84,32 @@ int informarQuantidadeEstoque(Produto produtos[],int numProdutos, int codigo){
 void venderProduto(Produto produtos[],int numProdutos, int codigo, int qtdDesejada){
     for(int i = 0; i < numProdutos;++i){
         if(produtos[i].codigo == 0 ){
-            if(produtos[i].quantidadeEstoque == 0){
+            if(produtos[i].qtdEstoque == 0){
                 printf("Produto %s está com estoque zero.\n", produtos[i].descricao);
                 return;
-            } else if (produtos[i].quantidadeEstoque < quantidadeDesejada) {
+            } else if (produtos[i].qtdEstoque < qtdDesejada) {
                 printf("Quantidade desejada menor que a quantidade em estoque. Deseja efetivar a compra? (1-Sim, 0-Não): ");
                 int opcao;
                 scanf("%d", &opcao);
                 if (opcao == 1) {
-                    printf("Compra realizada. Valor total: %.2f\n", produtos[i].quantidadeEstoque * produtos[i].valorUnitario);
-                    produtos[i].quantidadeEstoque = 0;
+                    printf("Compra realizada. Valor total: %.2f\n", produtos[i].qtdEstoque * produtos[i].valorUnidade);
+                    produtos[i].qtdEstoque = 0;
                 } else {
                     printf("Compra não realizada.\n");
                 }
             } else {
-                produtos[i].quantidadeEstoque -= quantidadeDesejada;
-                printf("Compra realizada. Valor total: %.2f\n", quantidadeDesejada * produtos[i].valorUnitario);
+                produtos[i].qtdEstoque -= qtdDesejada;
+                printf("Compra realizada. Valor total: %.2f\n", qtdDesejada * produtos[i].valorUnidade);
             }
             return;
         }
     }
     printf("Produto com código %d não encontrado.\n", codigo);
             }
-void atualizarQuantidadeEstoque(Produto produtos[], int numProdutos, int codigo, int novaQuantidade) {
+void atualizarQtdEstoque(Produto produtos[], int numProdutos, int codigo, int novaQuantidade) {
     for (int i = 0; i < numProdutos; i++) {
         if (produtos[i].codigo == codigo) {
-            produtos[i].quantidadeEstoque = novaQuantidade;
+            produtos[i].qtdEstoque = novaQuantidade;
             printf("Quantidade em estoque do produto %s atualizada para %d.\n", produtos[i].descricao, novaQuantidade);
             return;
         }
@@ -119,8 +119,13 @@ void atualizarQuantidadeEstoque(Produto produtos[], int numProdutos, int codigo,
 void exibirProdutosEstoqueZero(Produto produtos[], int numProdutos) {
     printf("Produtos com estoque zero:\n");
     for (int i = 0; i < numProdutos; i++) {
-        if (produtos[i].quantidadeEstoque == 0) {
+        if (produtos[i].qtdEstoque == 0) {
             printf("Código: %d, Descrição: %s\n", produtos[i].codigo, produtos[i].descricao);
         }
+    }
+}
+void exibirProduto(Produto produtos[],int numProdutos){
+    for (int i = 0; i < numProdutos; i++) {
+        printf("Código: %d, Descrição: %s\n", produtos[i].codigo, produtos[i].descricao);
     }
 }
