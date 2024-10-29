@@ -54,3 +54,13 @@ void cadastarProduto(Produto produtos[], int *numProdutos){
     scanf("%d",&produtos[*numProdutos].qtdEstoque);
     (*numProdutos) ++;
 }
+void exibirProduto(Produto produtos[],int numProdutos){
+    for(int i = 0; i < numProdutos){
+        if(produtos[i].codigo == 0){
+             printf("Informe o novo valor unitário do produto %s: ", produtos[i].descricao);
+            scanf("%f", &produtos[i].valorUnitario);
+            printf("Valor unitário atualizado com sucesso.\n");
+        }
+        return;
+    }
+}
