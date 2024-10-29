@@ -106,5 +106,21 @@ void venderProduto(Produto produtos[],int numProdutos, int codigo, int qtdDeseja
     }
     printf("Produto com código %d não encontrado.\n", codigo);
             }
-void atualizarQtdEstoque(Produto produtos[],int numProdutos, int codigo, int novaQtd);
-void exibirProdutosEstoqueZero(Produto produtos[],int numProdutos);
+void atualizarQuantidadeEstoque(Produto produtos[], int numProdutos, int codigo, int novaQuantidade) {
+    for (int i = 0; i < numProdutos; i++) {
+        if (produtos[i].codigo == codigo) {
+            produtos[i].quantidadeEstoque = novaQuantidade;
+            printf("Quantidade em estoque do produto %s atualizada para %d.\n", produtos[i].descricao, novaQuantidade);
+            return;
+        }
+    }
+    printf("Produto com código %d não encontrado.\n", codigo);
+}
+void exibirProdutosEstoqueZero(Produto produtos[], int numProdutos) {
+    printf("Produtos com estoque zero:\n");
+    for (int i = 0; i < numProdutos; i++) {
+        if (produtos[i].quantidadeEstoque == 0) {
+            printf("Código: %d, Descrição: %s\n", produtos[i].codigo, produtos[i].descricao);
+        }
+    }
+}
