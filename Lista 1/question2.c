@@ -55,7 +55,7 @@ void cadastarProduto(Produto produtos[], int *numProdutos){
     (*numProdutos) ++;
 }
 void exibirProduto(Produto produtos[],int numProdutos){
-    for(int i = 0; i < numProdutos){
+    for(int i = 0; i < numProdutos;++i){
         if(produtos[i].codigo == 0){
              printf("Informe o novo valor unitário do produto %s: ", produtos[i].descricao);
             scanf("%f", &produtos[i].valorUnitario);
@@ -63,4 +63,13 @@ void exibirProduto(Produto produtos[],int numProdutos){
         }
         return;
     }
+    printf("Produto com código %d não encontrado.\n", codigo);
+}
+float informarValorUnitario(Produto produtos[],int numProdutos, int codigo){
+    for(int i = 0; i < numProdutos;++i){
+        if(produtos[i].codigo == 0 ){
+            return produtos[i].qtdEstoque
+        }
+    }
+    return 1;
 }
