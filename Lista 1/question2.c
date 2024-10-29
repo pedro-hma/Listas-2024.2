@@ -68,8 +68,43 @@ void exibirProduto(Produto produtos[],int numProdutos){
 float informarValorUnitario(Produto produtos[],int numProdutos, int codigo){
     for(int i = 0; i < numProdutos;++i){
         if(produtos[i].codigo == 0 ){
+            return produtos[i].valorUnitario
+        }
+    }
+    return v;
+}
+int informarQuantidadeEstoque(Produto produtos[],int numProdutos, int codigo){
+    for(int i = 0; i < numProdutos;++i){
+        if(produtos[i].codigo == 0 ){
             return produtos[i].qtdEstoque
         }
     }
-    return 1;
+    return -1;
 }
+void venderProduto(Produto produtos[],int numProdutos, int codigo, int qtdDesejada){
+    for(int i = 0; i < numProdutos;++i){
+        if(produtos[i].codigo == 0 ){
+            if(produtos[i].quantidadeEstoque == 0){
+                printf("Produto %s está com estoque zero.\n", produtos[i].descricao);
+                return;
+            } else if (produtos[i].quantidadeEstoque < quantidadeDesejada) {
+                printf("Quantidade desejada menor que a quantidade em estoque. Deseja efetivar a compra? (1-Sim, 0-Não): ");
+                int opcao;
+                scanf("%d", &opcao);
+                if (opcao == 1) {
+                    printf("Compra realizada. Valor total: %.2f\n", produtos[i].quantidadeEstoque * produtos[i].valorUnitario);
+                    produtos[i].quantidadeEstoque = 0;
+                } else {
+                    printf("Compra não realizada.\n");
+                }
+            } else {
+                produtos[i].quantidadeEstoque -= quantidadeDesejada;
+                printf("Compra realizada. Valor total: %.2f\n", quantidadeDesejada * produtos[i].valorUnitario);
+            }
+            return;
+        }
+    }
+    printf("Produto com código %d não encontrado.\n", codigo);
+            }
+void atualizarQtdEstoque(Produto produtos[],int numProdutos, int codigo, int novaQtd);
+void exibirProdutosEstoqueZero(Produto produtos[],int numProdutos);
