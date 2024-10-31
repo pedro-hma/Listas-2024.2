@@ -10,7 +10,7 @@ typedef struct Conta{
     char telefone[15];
     float saldo;    
 } Conta;
-int buscarConta(Conta contas[],int numConta,int numeroConta);
+int buscarConta(Conta contas[],int numContas,int numeroConta);
 void cadastrarConta(Conta contas[], int *numConta);
 void consultarSaldo(Conta contas[],int nConta,int numConta);
 void fazerDeposito(Conta contas[],int numConta, int nConta);
@@ -34,4 +34,15 @@ int main(){
     exibirConta(contas,contas);
 
     return 0;
+}
+
+int buscarConta(Conta contas[], int numContas, int numeroConta){
+    if(numContas == 0){
+        return -1;
+    }for(int i = 0; i < numContas; ++i){
+        if(contas[i].numeroConta == numeroConta){
+            return i;
+        }
+    }
+    return -2;
 }
