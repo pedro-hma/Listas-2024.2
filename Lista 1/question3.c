@@ -46,3 +46,28 @@ int buscarConta(Conta contas[], int numContas, int numeroConta){
     }
     return -2;
 }
+
+void cadastrarConta(Conta contas[], int *numConta){
+    if(*numConta >= MAX_CONTA){
+        printf("Limite de contas cadastradas atingindas.\n");
+        return;
+    }
+    int numeroConta;
+    printf("Informe o número da nova conta: \n");
+    scanf("%d",&numeroConta);
+
+    if(buscarConta(contas,*numConta,numeroConta)>= 0){
+        printf("Número de conta já cadastrada.\n");
+        return;
+    }
+    contas[*numConta].numeroConta = numeroConta;
+    printf("Informe o nome do cliente: ");
+    scanf("%s", contas[*numConta].nomeCliente);
+    printf("Informe o CPF do cliente: ");
+    scanf("%s", contas[*numConta].cpf);
+    printf("Informe o telefone do cliente: ");
+    scanf("%s", contas[*numConta].telefone);
+    contas[*numConta].saldo = 0.0;
+    (*numConta)++;
+    printf("Conta cadastrada com sucesso.\n");
+}
