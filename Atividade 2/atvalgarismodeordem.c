@@ -38,3 +38,15 @@ int main(){
     fclose(arq);
     return 0;
 }
+
+void bubbleSort(int *arry, int a){
+     for(int i =0; i < a; i++){
+        for(int j = 0 ; j < a - i; j++){
+            if (arry[j] > arry[j + 1]) {
+                int temp = arry[j];
+                arry[j] = arry[j + 1];
+                arry[j + 1] = temp;
+             }
+        }
+    }
+}
