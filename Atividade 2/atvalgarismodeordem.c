@@ -50,3 +50,16 @@ void bubbleSort(int *arry, int a){
         }
     }
 }
+
+void insertionSort(int *arry, int a){
+    for (int i = 1; i < a; i++){
+        int chave = arry[i];
+        int j = i - 1;
+
+        while (j >= 0 && arry[j] > chave){
+            arry [j+1] = arry[j];
+             j = j - 1;
+        }
+        arry [j+1] = chave;
+    } 
+}
