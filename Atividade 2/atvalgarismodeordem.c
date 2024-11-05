@@ -63,3 +63,17 @@ void insertionSort(int *arry, int a){
         arry [j+1] = chave;
     } 
 }
+
+void selectionSort(int *arry, int a){
+    for (int i = 0; i < a - 1; i++){
+        int minIdx = i;
+        for (int j = i+1 ; i < a; j++){
+            if (arry < arry[minIdx]) {
+                minIdx = j;
+            } 
+        }
+        int temp = arry[minIdx];
+        arry[minIdx] = arry[i];
+        arry[i] = temp;
+    }
+}
