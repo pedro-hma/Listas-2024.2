@@ -1,8 +1,7 @@
-#include <stdio.h>      // Para printf, fprintf, FILE, fopen, fclose
-#include <stdlib.h>     // Para malloc, free, rand
-#include <time.h>       // Para clock, CLOCKS_PER_SEC
+#include <stdio.h>      
+#include <stdlib.h>
+#include <time.h>
 
-// Declarações das funções
 void bubbleSort(int *arr, int n);
 void insertionSort(int *arr, int n);
 void selectionSort(int *arr, int n);
@@ -11,7 +10,6 @@ void preencherVetorDesordenado(int *arr, int n);
 void preencherVetorOrdenado(int *arr, int n);
 void preencherVetorDecrescente(int *arr, int n);
 
-// Implementação dos algoritmos de ordenação
 void bubbleSort(int *arr, int n) {
     for (int i = 0; i < n - 1; i++) {
         for (int j = 0; j < n - i - 1; j++) {
@@ -50,15 +48,13 @@ void selectionSort(int *arr, int n) {
     }
 }
 
-// Função para calcular o tempo de execução
 double calcularTempo(void (*sortFunction)(int*, int), int *arr, int n) {
     clock_t inicio = clock();
     sortFunction(arr, n);
     clock_t fim = clock();
-    return ((double)(fim - inicio)) / CLOCKS_PER_SEC * 1000;  // Tempo em milissegundos
+    return ((double)(fim - inicio)) / CLOCKS_PER_SEC * 1000;
 }
 
-// Funções para preencher vetores em diferentes condições
 void preencherVetorDesordenado(int *arr, int n) {
     for (int i = 0; i < n; i++) {
         arr[i] = rand() % n;
@@ -97,8 +93,6 @@ int main() {
             printf("Falha na alocação de memória para tamanho %d\n", n);
             break;
         }
-
-        // Teste com vetor desordenado
         preencherVetorDesordenado(arr, n);
         double tempoBubble = calcularTempo(bubbleSort, arr, n);
 
