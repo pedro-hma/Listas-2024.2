@@ -1,116 +1,114 @@
-#include <stdio.h>      
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-void bubbleSort(int *arr, int n);
-void insertionSort(int *arr, int n);
-void selectionSort(int *arr, int n);
-double calcularTempo(void (*sortFunction)(int*, int), int *arr, int n);
-void preencherVetorDesordenado(int *arr, int n);
-void preencherVetorOrdenado(int *arr, int n);
-void preencherVetorDecrescente(int *arr, int n);
-
-void bubbleSort(int *arr, int n) {
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = 0; j < n - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
+void geraVetor(int *vetor, int tamanho) {
+    for (int i = 0; i < tamanho; i++) {
+        vetor[i] = rand() % 1000000; // Números aleatórios até 1 milhão
+    }
+}
+void preencheVetorOrdenado(int *vetor, int tamanho) {
+    for (int i = 0; i < tamanho; i++) {
+        vetor[i] = i;
+    }
+}
+void preencheVetorOrdenadoDecrescente(int *vetor, int tamanho) {
+    for (int i = 0; i < tamanho; i++) {
+        vetor[i] = tamanho - i - 1;
+    }
+}
+void bubbleSort(int *vetor, int tamanho) {
+    for (int i = 0; i < tamanho - 1; i++) {
+        for (int j = 0; j < tamanho - 1 - i; j++) {
+            if (vetor[j] > vetor[j + 1]) {
+                int temp = vetor[j];
+                vetor[j] = vetor[j + 1];
+                vetor[j + 1] = temp;
             }
         }
     }
 }
-
-void insertionSort(int *arr, int n) {
-    for (int i = 1; i < n; i++) {
-        int key = arr[i];
+void insertionSort(int *vetor, int tamanho) {
+    for (int i = 1; i < tamanho; i++) {
+        int key = vetor[i];
         int j = i - 1;
-        while (j >= 0 && arr[j] > key) {
-            arr[j + 1] = arr[j];
-            j = j - 1;
+        while (j >= 0 && vetor[j] > key) {
+            vetor[j + 1] = vetor[j];
+            j--;
         }
-        arr[j + 1] = key;
+        vetor[j + 1] = key;
     }
 }
-
-void selectionSort(int *arr, int n) {
-    for (int i = 0; i < n - 1; i++) {
+void selectionSort(int *vetor, int tamanho) {
+    for (int i = 0; i < tamanho - 1; i++) {
         int minIdx = i;
-        for (int j = i + 1; j < n; j++) {
-            if (arr[j] < arr[minIdx]) {
+        for (int j = i + 1; j < tamanho; j++) {
+            if (vetor[j] < vetor[minIdx]) {
                 minIdx = j;
             }
         }
-        int temp = arr[minIdx];
-        arr[minIdx] = arr[i];
-        arr[i] = temp;
+        if (minIdx != i) {
+            int temp = vetor[i];
+            vetor[i] = vetor[minIdx];
+            vetor[minIdx] = temp;
+        }
     }
 }
-
-double calcularTempo(void (*sortFunction)(int*, int), int *arr, int n) {
+double medeTempo(void (*funcaoOrdenacao)(int *, int), int *vetor, int tamanho) {
     clock_t inicio = clock();
-    sortFunction(arr, n);
+    funcaoOrdenacao(vetor, tamanho);
     clock_t fim = clock();
-    return ((double)(fim - inicio)) / CLOCKS_PER_SEC * 1000;
+    return ((double)(fim - inicio)) / CLOCKS_PER_SEC * 1000; 
 }
-
-void preencherVetorDesordenado(int *arr, int n) {
-    for (int i = 0; i < n; i++) {
-        arr[i] = rand() % n;
-    }
-}
-
-void preencherVetorOrdenado(int *arr, int n) {
-    for (int i = 0; i < n; i++) {
-        arr[i] = i;
-    }
-}
-
-void preencherVetorDecrescente(int *arr, int n) {
-    for (int i = 0; i < n; i++) {
-        arr[i] = n - i;
-    }
-}
-
 int main() {
     int tamanhos[] = {10, 100, 1000, 10000, 100000, 1000000, 10000000};
     int numTamanhos = sizeof(tamanhos) / sizeof(tamanhos[0]);
-    FILE *arquivo = fopen("tempos.xlsx", "w");
+    double temposBubbleSort[3][7], temposInsertionSort[3][7], temposSelectionSort[3][7];
+    for (int t = 0; t < numTamanhos; t++) {
+        int tamanho = tamanhos[t];
+        int *vetorDesordenado = (int *)malloc(tamanho * sizeof(int));
+        int *vetorOrdenado = (int *)malloc(tamanho * sizeof(int));
+        int *vetorDecrescente = (int *)malloc(tamanho * sizeof(int));
 
-    if (arquivo == NULL) {
-        printf("Erro ao abrir o arquivo para escrita.\n");
-        return 1;
+        geraVetor(vetorDesordenado, tamanho);
+        preencheVetorOrdenado(vetorOrdenado, tamanho);
+        preencheVetorOrdenadoDecrescente(vetorDecrescente, tamanho);
+
+        temposBubbleSort[0][t] = medeTempo(bubbleSort, vetorDesordenado, tamanho);
+        temposBubbleSort[1][t] = medeTempo(bubbleSort, vetorOrdenado, tamanho);
+        temposBubbleSort[2][t] = medeTempo(bubbleSort, vetorDecrescente, tamanho);
+
+        temposInsertionSort[0][t] = medeTempo(insertionSort, vetorDesordenado, tamanho);
+        temposInsertionSort[1][t] = medeTempo(insertionSort, vetorOrdenado, tamanho);
+        temposInsertionSort[2][t] = medeTempo(insertionSort, vetorDecrescente, tamanho);
+
+        temposSelectionSort[0][t] = medeTempo(selectionSort, vetorDesordenado, tamanho);
+        temposSelectionSort[1][t] = medeTempo(selectionSort, vetorOrdenado, tamanho);
+        temposSelectionSort[2][t] = medeTempo(selectionSort, vetorDecrescente, tamanho);
+        if (temposBubbleSort[0][t] > 300000 || temposInsertionSort[0][t] > 300000 || temposSelectionSort[0][t] > 300000) {
+            if (t > 0) {
+                t--; // Diminui o índice para rodar novamente com metade do tamanho
+                break;
+            }
+        }
+        free(vetorDesordenado);
+        free(vetorOrdenado);
+        free(vetorDecrescente);
     }
-
-    fprintf(arquivo, "Tamanho,Condicao,BubbleSort,InsertionSort,SelectionSort\n");
-
+    printf("Tempos BubbleSort:\n");
     for (int i = 0; i < numTamanhos; i++) {
-        int n = tamanhos[i];
-        int *arr = (int *)malloc(n * sizeof(int));
-        
-        if (arr == NULL) {
-            printf("Falha na alocação de memória para tamanho %d\n", n);
-            break;
-        }
-        preencherVetorDesordenado(arr, n);
-        double tempoBubble = calcularTempo(bubbleSort, arr, n);
-
-        preencherVetorOrdenado(arr, n);
-        double tempoInsertion = calcularTempo(insertionSort, arr, n);
-
-        preencherVetorDecrescente(arr, n);
-        double tempoSelection = calcularTempo(selectionSort, arr, n);
-
-        fprintf(arquivo, "%d,Desordenado,%lf,%lf,%lf\n", n, tempoBubble, tempoInsertion, tempoSelection);
-
-        free(arr);
-
-        if (tempoBubble > 300000 || tempoInsertion > 300000 || tempoSelection > 300000) {
-            tamanhos[i] = tamanhos[i] / 2;
-        }
+        printf("Tamanho %d: %.3f ms (Desordenado), %.3f ms (Ordenado), %.3f ms (Decrescente)\n",
+               tamanhos[i], temposBubbleSort[0][i], temposBubbleSort[1][i], temposBubbleSort[2][i]);
     }
-
-    fclose(arquivo);
+    printf("\nTempos InsertionSort:\n");
+    for (int i = 0; i < numTamanhos; i++) {
+        printf("Tamanho %d: %.3f ms (Desordenado), %.3f ms (Ordenado), %.3f ms (Decrescente)\n",
+               tamanhos[i], temposInsertionSort[0][i], temposInsertionSort[1][i], temposInsertionSort[2][i]);
+    }
+    printf("\nTempos SelectionSort:\n");
+    for (int i = 0; i < numTamanhos; i++) {
+        printf("Tamanho %d: %.3f ms (Desordenado), %.3f ms (Ordenado), %.3f ms (Decrescente)\n",
+               tamanhos[i], temposSelectionSort[0][i], temposSelectionSort[1][i], temposSelectionSort[2][i]);
+    }
     return 0;
 }
