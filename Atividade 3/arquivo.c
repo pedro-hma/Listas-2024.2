@@ -41,5 +41,31 @@ int main(){
         printf("6. Sair\n");
         printf("Escolha uma opção \n");
         scanf("%d",&opcao);
+
+        switch (opcao){
+            case 1:
+                cadastrarvideo();
+                break;
+            case 2:
+                cadastrarusuario();
+                break;
+            case 3:
+                listarvideo();
+                break;
+            case 4:
+                listarvideo();
+                break;
+            case 5:
+                printf("ID do usuário para remover: ");
+                scanf("%d", &id);
+                removerusuario(id);
+                break;
+            case 6:
+                printf("Saindo do programa.\n");
+                return 0;
+            default:
+                printf("Opção inválida!\n");
+        }
     }
+    return 0;
 }
