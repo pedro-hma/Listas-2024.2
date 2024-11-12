@@ -22,7 +22,13 @@ struct CADASTROUSUARIO{
     int videosfavaritos;
 } CADASTROUSUARIO;
 
-void cadastrarvideo();
+void cadastrarvideo(){
+    FILE *arquivo = fopen("videos.bin", "ab");
+    if(!arquivo){
+        perror("Erro ao abrir arquivo de vídeos.");
+        return;
+    }
+}
 void listarvideo();
 void cadastrarusuario();
 void listarusuario();
