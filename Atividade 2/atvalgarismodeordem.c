@@ -87,7 +87,7 @@ int main() {
         temposSelectionSort[2][t] = medeTempo(selectionSort, vetorDecrescente, tamanho);
         if (temposBubbleSort[0][t] > 300000 || temposInsertionSort[0][t] > 300000 || temposSelectionSort[0][t] > 300000) {
             if (t > 0) {
-                t--; // Diminui o índice para rodar novamente com metade do tamanho
+                t--;
                 break;
             }
         }
