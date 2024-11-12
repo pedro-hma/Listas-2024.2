@@ -20,3 +20,8 @@ struct CADASTROUSUARIO{
     int favoritos;
     int videosfavaritos;
 } CADASTROUSUARIO;
+void cadastrarvideo();
+void listarvideo();
+void cadastrarusuario();
+void listarusuario();
+void removerusuario();
