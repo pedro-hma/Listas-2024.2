@@ -1,54 +1,64 @@
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-# define MAX_NOME 50
-# define MAX_DESCRIÇÃO 100
-# define MAX_CATEGORIA 50
-# define MAX_VIDEOS 20
+#define MAX_NOME 50
+#define MAX_DESCRICAO 100
+#define MAX_CATEGORIA 50
+#define MAX_VIDEOS 20
 
- typedef struct VIDEO{
+typedef struct {
     int id;
-    char titulo [MAX_NOME];
-    char descricao [MAX_DESCRIÇÃO];
-    char categoria [MAX_CATEGORIA];
+    char titulo[MAX_NOME];
+    char descricao[MAX_DESCRICAO];
+    char categoria[MAX_CATEGORIA];
     int duracao;
 } VIDEO;
 
-typedef struct CADASTROUSUARIO{
+typedef struct {
     int id;
     char nome[MAX_NOME];
     int favoritos;
-    int videosfavaritos;
+    int videosfavoritos[MAX_VIDEOS];
 } CADASTROUSUARIO;
-void salvararquivo(const char *nomearquivo, int *data, size_t tam){
-    FILE *arquivo = fopen(nomearquivo, "ab");
-    if(!arquivo){
+
+void salvar_arquivo(const char *filename, void *data, size_t size) {
+    FILE *arquivo = fopen(filename, "ab");
+    if (!arquivo) {
         perror("Erro ao abrir o arquivo.");
         return;
     }
-    fwrite(data,tam,1,arquivo);
+    fwrite(data, size, 1, arquivo);
     fclose(arquivo);
 }
-void listararquivo(const char *nomearquivo, int *data, size_t tam, void (*print_func)(void *)){
-    FILE *arquivo = fopen(nomearquivo, "ab");
-    if(!arquivo){
+void listar_arquivo(const char *filename, size_t size, void (*print_func)(void *)) {
+    FILE *arquivo = fopen(filename, "rb");
+    if (!arquivo) {
         perror("Erro ao abrir o arquivo.");
         return;
     }
-    void *data = malloc(tam);
-    while(fread(data,tam,1,arquivo)){
+    void *data = malloc(size);
+    while (fread(data, size, 1, arquivo)) {
         print_func(data);
     }
     free(data);
     fclose(arquivo);
 }
-void cadastrarvideo(){
-    FILE *arquivo = fopen("videos.bin", "ab");
-    if(!arquivo){
-        perror("Erro ao abrir arquivo de vídeos.");
-        return;
+void print_video(void *data) {
+    VIDEO *video = (VIDEO *)data;
+    printf("ID: %d\nTítulo: %s\nDescrição: %s\nCategoria: %s\nDuração: %d minutos\n\n",
+           video->id, video->titulo, video->descricao, video->categoria, video->duracao);
+}
+void print_usuario(void *data) {
+    CADASTROUSUARIO *usuario = (CADASTROUSUARIO *)data;
+    printf("ID: %d\nNome: %s\nNúmero de Favoritos: %d\nVídeos Favoritos: ", 
+           usuario->id, usuario->nome, usuario->favoritos);
+    for (int i = 0; i < usuario->favoritos; i++) {
+        printf("%d ", usuario->videosfavoritos[i]);
     }
+    printf("\n\n");
+}
+void cadastrar_video() {
     VIDEO video;
     printf("ID do vídeo: ");
     scanf("%d", &video.id);
@@ -60,55 +70,80 @@ void cadastrarvideo(){
     scanf(" %[^\n]", video.categoria);
     printf("Duração do vídeo (em minutos): ");
     scanf("%d", &video.duracao);
+    salvar_arquivo("videos.bin", &video, sizeof(VIDEO));
+    printf("Vídeo cadastrado com sucesso!\n");
 }
-
-void listarvideo(){
-    FILE *arquivo = fopen("videos.bin", "ab");
-    if(!arquivo){
-        perror("Erro ao abrir arquivo de vídeos.");
+void cadastrar_usuario() {
+    CADASTROUSUARIO usuario;
+    printf("ID do usuário: ");
+    scanf("%d", &usuario.id);
+    printf("Nome do usuário: ");
+    scanf(" %[^\n]", usuario.nome);
+    printf("Número de vídeos favoritos: ");
+    scanf("%d", &usuario.favoritos);
+    for (int i = 0; i < usuario.favoritos; i++) {
+        printf("ID do vídeo favorito %d: ", i + 1);
+        scanf("%d", &usuario.videosfavoritos[i]);
+    }
+    salvar_arquivo("usuarios.bin", &usuario, sizeof(CADASTROUSUARIO));
+    printf("Usuário cadastrado com sucesso!\n");
+}
+void remover_usuario(int id) {
+    FILE *arquivo = fopen("usuarios.bin", "rb");
+    FILE *arquivo_temp = fopen("usuarios_temp.bin", "wb");
+    if (!arquivo || !arquivo_temp) {
+        perror("Erro ao abrir arquivos.");
         return;
     }
-    VIDEO video;
-    printf("\nLista de vídeos:\n");
-    while(fread(&video,sizeof(VIDEO),1,arquivo)){
-        printf("ID: %d\nTítulo: %s\nDescrição: %s\nCategoria: %s\nDuração: %d minutos\n\n",video.id, video.titulo, video.descricao, video.categoria, video.duracao);
+    CADASTROUSUARIO usuario;
+    int encontrado = 0;
+    while (fread(&usuario, sizeof(CADASTROUSUARIO), 1, arquivo)) {
+        if (usuario.id != id) {
+            fwrite(&usuario, sizeof(CADASTROUSUARIO), 1, arquivo_temp);
+        } else {
+            encontrado = 1;
+            printf("Usuário com ID %d removido.\n", id);
+        }
+    }
+    fclose(arquivo);
+    fclose(arquivo_temp);
+
+    remove("usuarios.bin");
+    rename("usuarios_temp.bin", "usuarios.bin");
+    if (!encontrado) {
+        printf("Usuário com ID %d não encontrado.\n", id);
     }
 }
-void cadastrarusuario();
-void listarusuario();
-void removerusuario();
-
-int main(){
-    int opcao,id;
-
-    while(1){
+int main() {
+    int opcao, id;
+    while (1) {
         printf("\nMenu:\n");
         printf("1. Cadastrar vídeo\n");
         printf("2. Cadastrar usuário\n");
-        printf("3. Listar vídeo\n");
-        printf("4. Listar usuário\n");
+        printf("3. Listar vídeos\n");
+        printf("4. Listar usuários\n");
         printf("5. Remover usuário\n");
         printf("6. Sair\n");
-        printf("Escolha uma opção \n");
-        scanf("%d",&opcao);
+        printf("Escolha uma opção: ");
+        scanf("%d", &opcao);
 
-        switch (opcao){
+        switch (opcao) {
             case 1:
-                cadastrarvideo();
+                cadastrar_video();
                 break;
             case 2:
-                cadastrarusuario();
+                cadastrar_usuario();
                 break;
             case 3:
-                listarvideo();
+                listar_arquivo("videos.bin", sizeof(VIDEO), print_video);
                 break;
             case 4:
-                listarvideo();
+                listar_arquivo("usuarios.bin", sizeof(CADASTROUSUARIO), print_usuario);
                 break;
             case 5:
                 printf("ID do usuário para remover: ");
                 scanf("%d", &id);
-                removerusuario(id);
+                remover_usuario(id);
                 break;
             case 6:
                 printf("Saindo do programa.\n");
