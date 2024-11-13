@@ -7,7 +7,7 @@
 # define MAX_CATEGORIA 50
 # define MAX_VIDEOS 20
 
-struct VIDEO{
+ typedef struct VIDEO{
     int id;
     char titulo [MAX_NOME];
     char descricao [MAX_DESCRIÇÃO];
@@ -15,7 +15,7 @@ struct VIDEO{
     int duracao;
 } VIDEO;
 
-struct CADASTROUSUARIO{
+typedef struct CADASTROUSUARIO{
     int id;
     char nome[MAX_NOME];
     int favoritos;
@@ -28,7 +28,19 @@ void cadastrarvideo(){
         perror("Erro ao abrir arquivo de vídeos.");
         return;
     }
+    VIDEO video;
+    printf("ID do vídeo: ");
+    scanf("%d", &video.id);
+    printf("Título do vídeo: ");
+    scanf(" %[^\n]", video.titulo);
+    printf("Descrição do vídeo: ");
+    scanf(" %[^\n]", video.descricao);
+    printf("Categoria do vídeo: ");
+    scanf(" %[^\n]", video.categoria);
+    printf("Duração do vídeo (em minutos): ");
+    scanf("%d", &video.duracao);
 }
+
 void listarvideo();
 void cadastrarusuario();
 void listarusuario();
