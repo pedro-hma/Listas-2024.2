@@ -58,62 +58,6 @@ void print_usuario(void *data) {
     }
     printf("\n\n");
 }
-void cadastrar_video() {
-    VIDEO video;
-    printf("ID do vídeo: ");
-    scanf("%d", &video.id);
-    printf("Título do vídeo: ");
-    scanf(" %[^\n]", video.titulo);
-    printf("Descrição do vídeo: ");
-    scanf(" %[^\n]", video.descricao);
-    printf("Categoria do vídeo: ");
-    scanf(" %[^\n]", video.categoria);
-    printf("Duração do vídeo (em minutos): ");
-    scanf("%d", &video.duracao);
-    salvar_arquivo("videos.bin", &video, sizeof(VIDEO));
-    printf("Vídeo cadastrado com sucesso!\n");
-}
-void cadastrar_usuario() {
-    CADASTROUSUARIO usuario;
-    printf("ID do usuário: ");
-    scanf("%d", &usuario.id);
-    printf("Nome do usuário: ");
-    scanf(" %[^\n]", usuario.nome);
-    printf("Número de vídeos favoritos: ");
-    scanf("%d", &usuario.favoritos);
-    for (int i = 0; i < usuario.favoritos; i++) {
-        printf("ID do vídeo favorito %d: ", i + 1);
-        scanf("%d", &usuario.videosfavoritos[i]);
-    }
-    salvar_arquivo("usuarios.bin", &usuario, sizeof(CADASTROUSUARIO));
-    printf("Usuário cadastrado com sucesso!\n");
-}
-void remover_usuario(int id) {
-    FILE *arquivo = fopen("usuarios.bin", "rb");
-    FILE *arquivo_temp = fopen("usuarios_temp.bin", "wb");
-    if (!arquivo || !arquivo_temp) {
-        perror("Erro ao abrir arquivos.");
-        return;
-    }
-    CADASTROUSUARIO usuario;
-    int encontrado = 0;
-    while (fread(&usuario, sizeof(CADASTROUSUARIO), 1, arquivo)) {
-        if (usuario.id != id) {
-            fwrite(&usuario, sizeof(CADASTROUSUARIO), 1, arquivo_temp);
-        } else {
-            encontrado = 1;
-            printf("Usuário com ID %d removido.\n", id);
-        }
-    }
-    fclose(arquivo);
-    fclose(arquivo_temp);
-
-    remove("usuarios.bin");
-    rename("usuarios_temp.bin", "usuarios.bin");
-    if (!encontrado) {
-        printf("Usuário com ID %d não encontrado.\n", id);
-    }
-}
 int main() {
     int opcao, id;
     while (1) {
