@@ -58,6 +58,22 @@ void print_usuario(void *data) {
     }
     printf("\n\n");
 }
+void cadastrarusuario(){
+    VIDEO video;
+    printf("ID do vídeo: ");
+    scanf("%d", &video.id);
+    printf("Título do vídeo: ");
+    scanf(" %[^\n]", video.titulo);
+    printf("Descrição do vídeo: ");
+    scanf(" %[^\n]", video.descricao);
+    printf("Categoria do vídeo: ");
+    scanf(" %[^\n]", video.categoria);
+    printf("Duração do vídeo (em minutos): ");
+    scanf("%d", &video.duracao);
+
+    salvar_arquivo("videos.bin", &video, sizeof(VIDEO));
+    printf("Vídeo cadastrado com sucesso!\n");
+}
 int main() {
     int opcao, id;
     while (1) {
