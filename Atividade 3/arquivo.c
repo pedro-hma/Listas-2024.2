@@ -25,7 +25,7 @@ typedef struct {
 void salvar_arquivo(const char *filename, void *data, size_t size) {
     FILE *arquivo = fopen(filename, "ab");
     if (!arquivo) {
-        perror("Erro ao abrir o arquivo.");
+        printf("Erro ao abrir o arquivo.");
         return;
     }
     fwrite(data, size, 1, arquivo);
@@ -34,7 +34,7 @@ void salvar_arquivo(const char *filename, void *data, size_t size) {
 void listar_arquivo(const char *filename, size_t size, void (*print_func)(void *)) {
     FILE *arquivo = fopen(filename, "rb");
     if (!arquivo) {
-        perror("Erro ao abrir o arquivo.");
+        printf("Erro ao abrir o arquivo.");
         return;
     }
     void *data = malloc(size);
@@ -59,26 +59,55 @@ void exibir_usuario(void *data) {
     printf("\n\n");
 }
 void cadastrar_usuario(){
-    VIDEO video;
-    printf("ID do vídeo: ");
-    scanf("%d", &video.id);
-    printf("Título do vídeo: ");
-    scanf(" %[^\n]", video.titulo);
-    printf("Descrição do vídeo: ");
-    scanf(" %[^\n]", video.descricao);
-    printf("Categoria do vídeo: ");
-    scanf(" %[^\n]", video.categoria);
-    printf("Duração do vídeo (em minutos): ");
-    scanf("%d", &video.duracao);
+    FILE *arquivo = fopen("usuarios.bin","rb");
+    if (!arquivo) {
+        printf("Erro ao abrir o arquivo.");
+        return;
+    }
+    CADASTROUSUARIO usuario;
 
-    salvar_arquivo("videos.bin", &video, sizeof(VIDEO));
-    printf("Vídeo cadastrado com sucesso!\n");
+    printf("\nCadastro do usuario\n ");
+    printf("ID do usuario: ");
+    scanf("%d",&usuario.id);
+    printf("Nome do usuario: ");
+    scanf("%d",&usuario.nome);
+    printf("Numero de videos favoritos: ");
+    scanf("%d",&usuario.favoritos);
+
+    for(int i = 0; i < usuario.favoritos; i++){
+        printf("ID do(s) video(s) favorito(s) %d",i +1);
+        scanf("%d",&usuario.videosfavoritos);
+    }
+    fwrite(&usuario,sizeof(CADASTROUSUARIO),1,arquivo);
+    fclose(arquivo);
+
+    printf("Usuario Cadstrado com sucesso.");
+}
+void listar_usuario(){
+    FILE *arquivo = fopen("usuarios.bin","rb");
+    if(!arquivo){
+        printf("Erro ao abrir o arquivo de usuarios");
+        return;
+    }
+    CADASTROUSUARIO usuario;
+    printf("\ Lista de Usuario\n");
+    while(fread(&usuario,sizeof(CADASTROUSUARIO),1,arquivo)){
+        printf("ID do usuario: %d\n",usuario.id);
+        printf("Nome do usuario :  %d\n",usuario.nome);
+        printf("Numero de video(s) favoritos:  %d\n",usuario.favoritos);
+
+        for(int i = 0; i < usuario.favoritos; i++){
+        printf("%d",usuario.videosfavoritos);
+        }
+        printf("\n \n");
+    }
+    fclose(arquivo);
 }
 void remover_usuario(int id){
     FILE *arquivo = fopen("usuarios.bin","rb");
     FILE *arquivo_temporario = fopen("usuarios_temporarios.bin","wb");
     if (!arquivo) {
-        perror("Erro ao abrir o arquivo.");
+        printf("Erro ao abrir o arquivo.");
         return;
     }
     CADASTROUSUARIO usuario;
@@ -105,7 +134,7 @@ void remover_usuario(int id){
 void cadastrar_video(){
     FILE *arquivo = fopen("videos.bin","ab");
     if(!arquivo){
-        perror("Erro ao abrir o arquivo de videos");
+        printf("Erro ao abrir o arquivo de videos");
         return;
     }
     VIDEO video;
@@ -124,6 +153,22 @@ void cadastrar_video(){
     fclose(arquivo);
 
     printf("Video cadastrado com sucesso\n");
+}
+void listar_video(){
+    FILE *arquivo = fopen("videos.bin","rb");
+    if(!arquivo){
+        printf("Erro ao abrir o arquivo de video");
+        return;
+    }
+    VIDEO video;
+    printf("\ Lista Videos\n");
+    while(fread(&video,sizeof(VIDEO),1,arquivo)){
+        printf("ID : %d\n",video.id);
+        printf("Titulo do video :  %d\n",video.titulo);
+        printf("Categoria do video:  %d\n",video.categoria);
+        printf("Tempo de duração do video : %d\n",video.duracao);
+        printf("Descrição do video: %d\n",video.descricao);
+    }
 }
 int main() {
     int opcao, id;
