@@ -44,12 +44,12 @@ void listar_arquivo(const char *filename, size_t size, void (*print_func)(void *
     free(data);
     fclose(arquivo);
 }
-void print_video(void *data) {
+void exibir_video(void *data) {
     VIDEO *video = (VIDEO *)data;
     printf("ID: %d\nTítulo: %s\nDescrição: %s\nCategoria: %s\nDuração: %d minutos\n\n",
            video->id, video->titulo, video->descricao, video->categoria, video->duracao);
 }
-void print_usuario(void *data) {
+void exibir_usuario(void *data) {
     CADASTROUSUARIO *usuario = (CADASTROUSUARIO *)data;
     printf("ID: %d\nNome: %s\nNúmero de Favoritos: %d\nVídeos Favoritos: ", 
            usuario->id, usuario->nome, usuario->favoritos);
@@ -58,7 +58,7 @@ void print_usuario(void *data) {
     }
     printf("\n\n");
 }
-void cadastrarusuario(){
+void cadastrar_usuario(){
     VIDEO video;
     printf("ID do vídeo: ");
     scanf("%d", &video.id);
@@ -73,6 +73,34 @@ void cadastrarusuario(){
 
     salvar_arquivo("videos.bin", &video, sizeof(VIDEO));
     printf("Vídeo cadastrado com sucesso!\n");
+}
+void remover_usuario(int id){
+    FILE *arquivo = fopen("usuarios.bin","rb");
+    FILE *arquivo_temporario = fopen("usuarios_temporarios.bin","wb");
+    if (!arquivo) {
+        perror("Erro ao abrir o arquivo.");
+        return;
+    }
+    CADASTROUSUARIO usuario;
+    int encontrado = 0;
+
+    while(fread(&usuario,sizeof(CADASTROUSUARIO),1,arquivo)){
+        if(usuario.id != id){
+            fread(&usuario,sizeof(CADASTROUSUARIO),1,arquivo_temporario);
+        } else{
+            encontrado = 1;
+            printf("Usuario com id %d foi removido",id);
+        }
+    }
+    fclose(arquivo);
+    fclose(arquivo_temporario);
+
+    remove("usuarios.bin");
+    remove("usuarios temporarios.bin");
+
+    if(!encontrado){
+        printf("Usuario com id %d não encontado",id);
+    }
 }
 int main() {
     int opcao, id;
@@ -95,10 +123,10 @@ int main() {
                 cadastrar_usuario();
                 break;
             case 3:
-                listar_arquivo("videos.bin", sizeof(VIDEO), print_video);
+                listar_arquivo("videos.bin", sizeof(VIDEO), exibir_video);
                 break;
             case 4:
-                listar_arquivo("usuarios.bin", sizeof(CADASTROUSUARIO), print_usuario);
+                listar_arquivo("usuarios.bin", sizeof(CADASTROUSUARIO), exibir_usuario);
                 break;
             case 5:
                 printf("ID do usuário para remover: ");
