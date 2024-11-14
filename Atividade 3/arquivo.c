@@ -102,6 +102,29 @@ void remover_usuario(int id){
         printf("Usuario com id %d não encontado",id);
     }
 }
+void cadastrar_video(){
+    FILE *arquivo = fopen("videos.bin","ab");
+    if(!arquivo){
+        perror("Erro ao abrir o arquivo de videos");
+        return;
+    }
+    VIDEO video;
+    printf("ID do video: ");
+    scanf("%d",&video.id);
+    printf("Titulo do video: ");
+    scanf("%d",&video.titulo);
+    printf("Descrição do video: ");
+    scanf("%d",&video.descricao);
+    printf("Categoria do video: ");
+    scanf("%d",&video.categoria);
+    printf("Duração do video em minutos: ");
+    scanf("%d",&video.duracao);
+
+    fwrite(&video,sizeof(VIDEO),1,arquivo);
+    fclose(arquivo);
+
+    printf("Video cadastrado com sucesso\n");
+}
 int main() {
     int opcao, id;
     while (1) {
