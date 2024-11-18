@@ -70,7 +70,7 @@ void cadastrar_usuario(){
     printf("ID do usuario: ");
     scanf("%d",&usuario.id);
     printf("Nome do usuario: ");
-    scanf("%d",&usuario.nome);
+    scanf(" %[^\n]", usuario.nome);
     printf("Numero de videos favoritos: ");
     scanf("%d",&usuario.favoritos);
 
@@ -141,9 +141,9 @@ void cadastrar_video(){
     printf("ID do video: ");
     scanf("%d",&video.id);
     printf("Titulo do video: ");
-    scanf("%d",&video.titulo);
+   scanf(" %[^\n]", video.titulo);
     printf("Descrição do video: ");
-    scanf("%d",&video.descricao);
+    scanf(" %[^\n]", video.titulo);
     printf("Categoria do video: ");
     scanf("%d",&video.categoria);
     printf("Duração do video em minutos: ");
