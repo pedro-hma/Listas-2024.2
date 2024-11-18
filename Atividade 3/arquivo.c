@@ -59,7 +59,7 @@ void exibir_usuario(void *data) {
     printf("\n\n");
 }
 void cadastrar_usuario(){
-    FILE *arquivo = fopen("usuarios.bin","rb");
+    FILE *arquivo = fopen("usuarios.bin","ab");
     if (!arquivo) {
         printf("Erro ao abrir o arquivo.");
         return;
@@ -143,9 +143,9 @@ void cadastrar_video(){
     printf("Titulo do video: ");
    scanf(" %[^\n]", video.titulo);
     printf("Descrição do video: ");
-    scanf(" %[^\n]", video.titulo);
+    scanf(" %[^\n]", video.descricao);
     printf("Categoria do video: ");
-    scanf("%d",&video.categoria);
+    scanf(" %[^\n]", video.categoria);
     printf("Duração do video em minutos: ");
     scanf("%d",&video.duracao);
 
